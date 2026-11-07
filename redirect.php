@@ -52,4 +52,5 @@ $subtitle = $state === 'inactive'
   </section>
 </main>
 <footer class="public-modal-footer">Desenvolvido por <strong>Edtek Soluções em Informática</strong></footer>
+<a class="support-float" href="https://wa.me/5521991928446" target="_blank" rel="noopener" aria-label="Falar com o suporte pelo WhatsApp"><span class="support-float-icon">✆</span><span>Suporte</span></a>
 </body></html>
