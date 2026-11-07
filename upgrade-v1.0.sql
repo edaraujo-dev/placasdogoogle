@@ -67,6 +67,10 @@ ALTER TABLE plaques
   ADD COLUMN reseller_id BIGINT UNSIGNED NULL,
   ADD COLUMN product_type ENUM('google_review','whatsapp','instagram') NOT NULL DEFAULT 'google_review',
   ADD COLUMN sold_at DATETIME NULL,
+  ADD COLUMN destination_url TEXT NULL,
+  ADD COLUMN whatsapp_phone VARCHAR(30) NULL,
+  ADD COLUMN whatsapp_message VARCHAR(500) NULL,
+  ADD COLUMN instagram_url VARCHAR(500) NULL,
   ADD INDEX idx_plaques_product_type(product_type),
   ADD CONSTRAINT fk_plaques_customer FOREIGN KEY (activated_by_user_id) REFERENCES customer_accounts(id) ON DELETE SET NULL,
   ADD CONSTRAINT fk_plaques_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL;
