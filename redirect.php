@@ -35,7 +35,7 @@ $subtitle = $state === 'inactive'
 </head>
 <body class="public-state public-modal-page">
 <div class="public-backdrop-glow" aria-hidden="true"></div>
-<header class="public-top-brand"><span class="brand-mark">E</span><span>EDTEK <b>REVIEW</b><small>TECNOLOGIA PARA AVALIAÇÕES</small></span></header>
+<header class="public-top-brand"><img class="brand-logo" src="<?=e(app_url('assets/logo%20edtek.png'))?>" alt="Edtek Soluções"><span>EDTEK <b>REVIEW</b><small>TECNOLOGIA PARA AVALIAÇÕES</small></span></header>
 <main class="public-modal-stage">
   <section class="public-modal-card" role="dialog" aria-modal="true" aria-labelledby="public-title">
     <div class="public-modal-symbol <?=$state==='inactive'?'warning':'error'?>"><span><?=$state==='inactive'?'!':'×'?></span></div>
@@ -51,5 +51,6 @@ $subtitle = $state === 'inactive'
     <a class="button public-modal-action" href="javascript:history.back()">Voltar</a>
   </section>
 </main>
+<a class="floating-support public-support" href="https://wa.me/5521991928446" target="_blank" rel="noopener"><span>◔</span><b>Falar com suporte</b></a>
 <footer class="public-modal-footer">Desenvolvido por <strong>Edtek Soluções em Informática</strong></footer>
 </body></html>
