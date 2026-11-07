@@ -35,7 +35,7 @@ $subtitle = $state === 'inactive'
 </head>
 <body class="public-state public-modal-page">
 <div class="public-backdrop-glow" aria-hidden="true"></div>
-<header class="public-top-brand"><span class="brand-mark">E</span><span>EDTEK <b>REVIEW</b><small>TECNOLOGIA PARA AVALIAÇÕES</small></span></header>
+<header class="public-top-brand"><img class="brand-logo" src="<?=e(app_url('assets/logo%20edtek.png'))?>" alt="Edtek Soluções"><span>REVIEW<small>TECNOLOGIA PARA AVALIAÇÕES</small></span></header>
 <main class="public-modal-stage">
   <section class="public-modal-card" role="dialog" aria-modal="true" aria-labelledby="public-title">
     <div class="public-modal-symbol <?=$state==='inactive'?'warning':'error'?>"><span><?=$state==='inactive'?'!':'×'?></span></div>
