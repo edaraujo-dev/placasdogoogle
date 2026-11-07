@@ -4,10 +4,10 @@ require __DIR__ . '/app/bootstrap.php';
 $code = trim($_GET['code'] ?? '');
 if (!preg_match('/^[A-Za-z0-9_-]{3,40}$/', $code)) { http_response_code(404); $state='not-found'; }
 else {
-    $stmt = db()->prepare("SELECT p.id,p.status,c.google_review_url,c.status company_status,c.name company_name FROM plaques p LEFT JOIN companies c ON c.id=p.company_id WHERE p.code=? LIMIT 1");
+    $stmt = db()->prepare("SELECT p.id,p.status,p.product_type,p.destination_url,p.whatsapp_phone,p.whatsapp_message,p.instagram_url,c.google_review_url,c.destination_url company_destination,c.status company_status,c.name company_name FROM plaques p LEFT JOIN companies c ON c.id=p.company_id WHERE p.code=? LIMIT 1");
     $stmt->execute([$code]); $row = $stmt->fetch();
     if (!$row) { http_response_code(404); $state='not-found'; }
-    elseif ($row['status'] !== 'active' || $row['company_status'] !== 'active' || empty($row['google_review_url'])) { http_response_code(200); $state='inactive'; }
+    elseif ($row['status'] !== 'active' || $row['company_status'] !== 'active') { http_response_code(200); $state='inactive'; }
     else {
         $source = ($_GET['src'] ?? '') === 'nfc' ? 'nfc' : (($_GET['src'] ?? '') === 'qr' ? 'qr' : 'unknown');
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
