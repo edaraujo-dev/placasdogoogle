@@ -79,7 +79,7 @@ function layout_start(string $title): void {
             ['companies.php','Clínicas','⌂'],
             ['plaques.php','Placas','▦'],
             ['plaque-batch.php','Gerar placas','＋'],
-            ['#suporte','Suporte','?'],
+            ['https://wa.me/5521991928446','Suporte','?'],
         ];
         foreach ($items as [$href,$label,$icon]) {
             $isActive = $active === $href;
