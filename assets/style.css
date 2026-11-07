@@ -68,3 +68,11 @@ body.public-modal-page{position:relative;overflow-x:hidden;display:flex;flex-dir
 .public-modal-action{display:block;margin-top:22px;padding:14px 18px}.public-modal-footer{position:relative;z-index:1;text-align:center;padding:0 0 23px;color:#7e91b1;font-size:10px}.public-modal-footer strong{color:#c0cce0}
 @media(max-width:520px){body.public-modal-page{padding:0 14px}.public-top-brand{padding:20px 3px}.public-modal-stage{padding:15px 0 25px}.public-modal-card{padding:32px 21px 24px;border-radius:23px}.public-modal-card h1{font-size:24px}.public-modal-card>p{font-size:13px}.public-code-box{align-items:flex-start;flex-direction:column;gap:5px}.public-modal-footer{font-size:9px}}
 @media print{.sidebar,.app-topbar,.app-footer,.sidebar-scrim{display:none!important}.app-layout,.app-main{display:block!important;width:100mm!important;margin:0!important;min-height:0!important}.app-main>.wrap{display:block!important;width:100mm!important;max-width:none!important;margin:0!important;padding:0!important}}
+
+/* Identidade visual oficial Edtek */
+.brand-logo{display:block;width:142px;height:auto;max-height:42px;object-fit:contain;flex:0 0 auto;filter:brightness(0) invert(1)}
+.sidebar-brand{gap:12px}.sidebar-brand .brand-name{font-size:13px;color:#fff;letter-spacing:1px}.sidebar-brand .brand-name small{font-size:7px;letter-spacing:1.15px}
+.login-top .brand-logo{width:150px;max-height:44px}
+.support-float{position:fixed;right:22px;bottom:22px;z-index:100;display:flex;align-items:center;gap:9px;padding:12px 17px;border-radius:999px;background:#20b968;color:#fff;text-decoration:none;font-size:12px;font-weight:800;box-shadow:0 9px 28px #0b7a4545;transition:transform .18s,box-shadow .18s}
+.support-float:hover{transform:translateY(-2px);box-shadow:0 13px 32px #0b7a4555}.support-float-icon{font-size:19px;line-height:1}
+@media(max-width:520px){.brand-logo{width:122px}.support-float{right:14px;bottom:14px;padding:12px 14px}.support-float>span:last-child{display:none}}
