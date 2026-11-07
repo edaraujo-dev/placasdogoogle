@@ -73,20 +73,21 @@ function layout_start(string $title): void {
     echo '<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">';
     echo '<meta name="theme-color" content="#101d36"><title>' . e($title) . ' | Edtek Review</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css"></head><body class="app-body">';
     if (is_logged_in()) {
-        echo '<div class="app-layout"><aside class="sidebar" id="app-sidebar"><a href="dashboard.php" class="brand sidebar-brand"><span class="brand-mark">E</span><span class="brand-name">EDTEK <b>REVIEW</b><small>GESTÃO DE AVALIAÇÕES</small></span></a><div class="sidebar-label">MENU PRINCIPAL</div><nav class="sidebar-nav">';
+        echo '<div class="app-layout"><aside class="sidebar" id="app-sidebar"><a href="dashboard.php" class="brand sidebar-brand"><img class="brand-logo" src="assets/logo%20edtek.png" alt="Edtek Soluções"><span class="brand-name">EDTEK <b>REVIEW</b><small>GESTÃO DE AVALIAÇÕES</small></span></a><div class="sidebar-label">MENU PRINCIPAL</div><nav class="sidebar-nav">';
         $items = [
             ['dashboard.php','Visão geral','◫'],
             ['companies.php','Clínicas','⌂'],
             ['plaques.php','Placas','▦'],
             ['plaque-batch.php','Gerar placas','＋'],
+            ['#suporte','Suporte','?'],
         ];
         foreach ($items as [$href,$label,$icon]) {
             $isActive = $active === $href;
             echo '<a class="' . ($isActive ? 'active' : '') . '" href="' . $href . '"><span class="side-icon">' . $icon . '</span><span>' . $label . '</span>' . ($isActive ? '<i></i>' : '') . '</a>';
         }
-        echo '</nav><div class="sidebar-bottom"><div class="sidebar-user"><span class="user-avatar">E</span><span><b>Administrador</b><small>Edtek Review</small></span></div><a class="sidebar-logout" href="logout.php">↪ <span>Sair do sistema</span></a></div></aside><div class="sidebar-scrim" data-sidebar-close></div><section class="app-main"><header class="app-topbar"><button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" data-sidebar-toggle><span></span><span></span><span></span></button><div class="topbar-title"><span>EDTEK REVIEW</span><b>' . e($title) . '</b></div><div class="topbar-right"><span class="online-dot"></span><span>Painel administrativo</span><span class="topbar-avatar">E</span></div></header><main class="wrap">';
+        echo '</nav><div class="sidebar-support"><a href="https://wa.me/5521991928446" target="_blank" rel="noopener">Precisa de ajuda? <b>Falar com suporte ↗</b></a></div><div class="sidebar-bottom"><div class="sidebar-user"><span class="user-avatar">E</span><span><b>Administrador</b><small>Edtek Review</small></span></div><a class="sidebar-logout" href="logout.php">↪ <span>Sair do sistema</span></a></div></aside><div class="sidebar-scrim" data-sidebar-close></div><section class="app-main"><header class="app-topbar"><button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" data-sidebar-toggle><span></span><span></span><span></span></button><div class="topbar-title"><span>EDTEK REVIEW</span><b>' . e($title) . '</b></div><div class="topbar-right"><span class="online-dot"></span><span>Painel administrativo</span><span class="topbar-avatar">E</span></div></header><main class="wrap">';
     } else {
-        echo '<header class="login-top"><a href="login.php" class="brand"><span class="brand-mark">E</span><span class="brand-name">EDTEK <b>REVIEW</b><small>GESTÃO DE AVALIAÇÕES</small></span></a></header><main class="wrap login-wrap">';
+        echo '<header class="login-top"><a href="login.php" class="brand"><img class="brand-logo" src="assets/logo%20edtek.png" alt="Edtek Soluções"><span class="brand-name">EDTEK <b>REVIEW</b><small>GESTÃO DE AVALIAÇÕES</small></span></a></header><main class="wrap login-wrap">';
     }
     if ($flash) {
         $kind = ($flash['type'] ?? '') === 'error' ? 'error' : 'success';
@@ -95,6 +96,7 @@ function layout_start(string $title): void {
     }
 }
 function layout_end(): void {
+    echo '<a class="floating-support" href="https://wa.me/5521991928446" target="_blank" rel="noopener" aria-label="Falar com o suporte Edtek pelo WhatsApp"><span>◔</span><b>Suporte</b></a>';
     if (is_logged_in()) echo '</main><footer class="app-footer">Edtek Review <span>·</span> Tecnologia para experiências melhores</footer></section></div>';
     else echo '</main><footer class="app-footer">Edtek Review <span>·</span> Tecnologia para experiências melhores</footer>';
     echo '<script>document.addEventListener("keydown",function(e){if(e.key==="Escape"){document.body.classList.remove("sidebar-open");document.querySelectorAll(".modal-backdrop").forEach(function(m){m.remove()})}});document.querySelectorAll(".modal-backdrop").forEach(function(m){m.addEventListener("click",function(e){if(e.target===m)m.remove()})});document.querySelectorAll("[data-sidebar-toggle]").forEach(function(b){b.addEventListener("click",function(){document.body.classList.toggle("sidebar-open");b.setAttribute("aria-expanded",document.body.classList.contains("sidebar-open"))})});document.querySelectorAll("[data-sidebar-close]").forEach(function(b){b.addEventListener("click",function(){document.body.classList.remove("sidebar-open")})});document.querySelectorAll("[data-modal-close]").forEach(function(b){b.addEventListener("click",function(){var m=b.closest(".modal-backdrop");if(m)m.remove()})});</script></body></html>';
