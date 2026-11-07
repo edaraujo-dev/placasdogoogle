@@ -83,3 +83,7 @@ body.public-modal-page{position:relative;overflow-x:hidden;display:flex;flex-dir
 .floating-support:hover{transform:translateY(-2px);box-shadow:0 14px 32px #0c6b3c55}
 .public-support{position:relative;right:auto;bottom:auto;align-self:center;margin:0 auto 16px}
 @media(max-width:520px){.floating-support{right:14px;bottom:14px;padding:11px 14px}.floating-support b{font-size:11px}.brand-logo{max-width:108px}}
+
+/* Assinatura oficial Edtek na placa impressa */
+.review-plaque.exact-template .plaque-edtek-logo{position:absolute;left:4.5%;top:88.2%;width:19%;height:7%;object-fit:contain;object-position:left center;background:#fff;padding:1mm;z-index:2}
+@media print{.review-plaque.exact-template .plaque-edtek-logo{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
