@@ -27,7 +27,7 @@ body{margin:0;font-family:Arial,sans-serif;color:#16345a;background:#eef3f8}
 .toolbar button{border:0;border-radius:7px;padding:10px 18px;background:#1680d5;color:#fff;font-weight:bold;cursor:pointer}
 .sheet{display:grid;grid-template-columns:100mm;gap:5mm;justify-content:center;justify-items:center;padding:10mm}
 .plaque{width:100mm;height:100mm;background:#fff;border:1px solid #d8e5f2;border-radius:3mm;overflow:hidden;position:relative;text-align:center;padding:7mm 6mm 5mm;break-inside:avoid;page-break-inside:avoid}
-.brand{font-weight:800;font-size:17pt;letter-spacing:1.5px;color:#123c70}
+.brand{display:flex;align-items:center;justify-content:center;gap:3mm;font-weight:800;font-size:17pt;letter-spacing:1.5px;color:#123c70}.brand img{width:38mm;height:auto;max-height:9mm;object-fit:contain}.brand span{color:#1685d6}
 .brand span{color:#1685d6}
 .tag{font-size:10pt;color:#5b718b;margin-top:1mm}
 .stars{font-size:22pt;letter-spacing:3px;color:#f5b400;margin:4mm 0 1mm}
@@ -49,7 +49,7 @@ body{margin:0;font-family:Arial,sans-serif;color:#16345a;background:#eef3f8}
 <div class="sheet">
 <?php foreach ($plaques as $p): $qrUrl = $base . '/r/' . rawurlencode($p['code']) . '?src=qr'; ?>
 <section class="plaque">
- <div class="brand">EDTEK <span>REVIEW</span></div>
+ <div class="brand"><img src="assets/logo%20edtek.png" alt="Edtek Soluções"><span>REVIEW</span></div>
  <div class="tag">AVALIAÇÃO GOOGLE</div>
  <div class="stars">★★★★★</div>
  <div class="headline">Sua avaliação é<br>muito importante!</div>
