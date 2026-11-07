@@ -68,3 +68,18 @@ body.public-modal-page{position:relative;overflow-x:hidden;display:flex;flex-dir
 .public-modal-action{display:block;margin-top:22px;padding:14px 18px}.public-modal-footer{position:relative;z-index:1;text-align:center;padding:0 0 23px;color:#7e91b1;font-size:10px}.public-modal-footer strong{color:#c0cce0}
 @media(max-width:520px){body.public-modal-page{padding:0 14px}.public-top-brand{padding:20px 3px}.public-modal-stage{padding:15px 0 25px}.public-modal-card{padding:32px 21px 24px;border-radius:23px}.public-modal-card h1{font-size:24px}.public-modal-card>p{font-size:13px}.public-code-box{align-items:flex-start;flex-direction:column;gap:5px}.public-modal-footer{font-size:9px}}
 @media print{.sidebar,.app-topbar,.app-footer,.sidebar-scrim{display:none!important}.app-layout,.app-main{display:block!important;width:100mm!important;margin:0!important;min-height:0!important}.app-main>.wrap{display:block!important;width:100mm!important;max-width:none!important;margin:0!important;padding:0!important}}
+
+/* Marca Edtek oficial e suporte rápido */
+.brand-logo{display:block;width:clamp(105px,11vw,142px);max-height:44px;object-fit:contain;object-position:left center;flex:0 0 auto}
+.sidebar-brand .brand-logo{width:112px;max-height:38px}
+.login-top .brand-logo{width:132px;max-height:42px}
+.public-top-brand .brand-logo{width:126px;max-height:42px}
+.sidebar-support{margin-top:auto;padding:14px 10px;border:1px solid #ffffff16;border-radius:12px;background:#ffffff08}
+.sidebar-support a{display:flex;flex-direction:column;gap:3px;color:#9eacc4;text-decoration:none;font-size:10px}
+.sidebar-support b{color:#fff;font-size:12px}
+.sidebar-bottom{margin-top:14px}
+.floating-support{position:fixed;right:22px;bottom:22px;z-index:180;display:flex;align-items:center;gap:9px;padding:12px 17px;border-radius:999px;background:#20a765;color:#fff;text-decoration:none;box-shadow:0 10px 28px #0c6b3c42;font-size:12px;font-weight:800}
+.floating-support span{font-size:18px;line-height:1}
+.floating-support:hover{transform:translateY(-2px);box-shadow:0 14px 32px #0c6b3c55}
+.public-support{position:relative;right:auto;bottom:auto;align-self:center;margin:0 auto 16px}
+@media(max-width:520px){.floating-support{right:14px;bottom:14px;padding:11px 14px}.floating-support b{font-size:11px}.brand-logo{max-width:108px}}
