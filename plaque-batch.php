@@ -112,12 +112,12 @@ layout_start('Gerar placas');
   <div class="heading"><div><h2>Lote criado: <?=count($created)?> placas</h2><p>As placas abaixo estão em estoque. Use a impressão em escala de 100%, sem ajustar à página.</p></div><button type="button" onclick="window.print()">Imprimir placas / Salvar PDF</button></div>
   <div class="print-grid">
   <?php foreach ($created as $item): ?>
-    <article class="review-plaque exact-template">
+    <article class="review-plaque exact-template product-<?=e($productType)?>">
       <?php
       $artwork = [
-        'google_review' => 'assets/plaque-template.png',
-        'whatsapp' => 'assets/placa whatsapp.png',
-        'instagram' => 'assets/placa instagram.png',
+        'google_review' => 'assets/avaliacao_google.jpeg',
+        'whatsapp' => 'assets/acesso_whatsapp.jpeg',
+        'instagram' => 'assets/acesso_instagram.jpeg',
       ][$productType] ?? 'assets/plaque-template.png';
       $artworkLabel = [
         'google_review' => 'Google Avaliações',
@@ -127,7 +127,7 @@ layout_start('Gerar placas');
       ?>
       <img class="plaque-art" src="<?=e(app_url($artwork))?>" alt="<?=e('Arte da placa '.$artworkLabel)?> com NFC e QR Code">
       <div class="qr-overlay" data-qr="<?=e($item['url'])?>" aria-label="QR Code dinâmico individual"></div>
-      <img class="plaque-edtek-logo" src="assets/logo%20edtek.png" alt="Edtek Soluções"><div class="plaque-identification"><strong><?=e($item['code'])?></strong><span>ATIVAÇÃO: <?=e($item['activation'])?></span></div>
+      <div class="plaque-identification"><strong><?=e($item['code'])?></strong><span>ATIVAÇÃO: <?=e($item['activation'])?></span></div>
     </article>
   <?php endforeach; ?>
   </div>
