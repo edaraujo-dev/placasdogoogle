@@ -4,8 +4,8 @@ require __DIR__.'/app/bootstrap.php';require_login();
 require __DIR__.'/app/customer.php';
 $existing=db()->query('SELECT * FROM email_settings WHERE id=1')->fetch();$error='';
 if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='save'){
- verify_csrf();$host=trim($_POST['host']??'');$port=(int)($_POST['port']??587);$user=trim($_POST['username']??'');$pass=(string)($_POST['password']??'');$enc=$_POST['encryption']??'tls';$fromName=trim($_POST['from_name']??'Edtek Review');$from=trim($_POST['from_email']??'');$reply=trim($_POST['reply_to']??'');
- if($host===''||$port<1||$port>65535||!filter_var($from,FILTER_VALIDATE_EMAIL)||!in_array($enc,['none','ssl','tls'],true))$error='Confira host, porta, segurança e e-mail remetente.';
+ verify_csrf();$host=trim($_POST['host']??'');$port=(int)($_POST['port']??587);$user=trim($_POST['username']??'');$pass=(string)($_POST['password']??'');$enc=$_POST['encryption']??'tls';$fromName=trim(preg_replace('/[\\r\\n]+/',' ',(string)($_POST['from_name']??'Edtek Review')));$from=trim($_POST['from_email']??'');$reply=trim($_POST['reply_to']??'');
+ if($host===''||$port<1||$port>65535||!filter_var($from,FILTER_VALIDATE_EMAIL)||($reply!==''&&!filter_var($reply,FILTER_VALIDATE_EMAIL))||!in_array($enc,['none','ssl','tls'],true))$error='Confira host, porta, segurança e e-mail remetente.';
  else{
   $crypto=hash('sha256',(string)($config['db']['pass']??'').'|'.(string)$config['base_url'].'|edtek-review-mail',true);$encrypted=$existing['password_encrypted']??null;
   if($pass!==''){$iv=random_bytes(16);$cipher=openssl_encrypt($pass,'aes-256-cbc',$crypto,OPENSSL_RAW_DATA,$iv);$encrypted=base64_encode($iv.$cipher);}
