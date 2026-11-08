@@ -1,0 +1,25 @@
+name: Build Edtek Review ZIP
+on:
+  push:
+    branches:
+      - feature/edtek-review-completo-v1
+  workflow_dispatch:
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create source package
+        run: |
+          zip -r edtek-review-v1.zip . \
+            -x '.git/*' \
+               'error_log' \
+               'config.php' \
+               '*.log' \
+               '*/.DS_Store'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: edtek-review-v1
+          path: edtek-review-v1.zip
+          if-no-files-found: error
+          retention-days: 7

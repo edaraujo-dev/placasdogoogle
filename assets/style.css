@@ -76,3 +76,34 @@ body.public-modal-page{position:relative;overflow-x:hidden;display:flex;flex-dir
 .support-float{position:fixed;right:22px;bottom:22px;z-index:100;display:flex;align-items:center;gap:9px;padding:12px 17px;border-radius:999px;background:#20b968;color:#fff;text-decoration:none;font-size:12px;font-weight:800;box-shadow:0 9px 28px #0b7a4545;transition:transform .18s,box-shadow .18s}
 .support-float:hover{transform:translateY(-2px);box-shadow:0 13px 32px #0b7a4555}.support-float-icon{font-size:19px;line-height:1}
 @media(max-width:520px){.brand-logo{width:122px}.support-float{right:14px;bottom:14px;padding:12px 14px}.support-float>span:last-child{display:none}}
+
+/* Assinatura oficial Edtek na arte impressa do lote */
+.review-plaque.exact-template .plaque-edtek-logo{position:absolute;left:4.5%;top:88.2%;width:19%;height:7%;object-fit:contain;object-position:left center;background:#fff;padding:1mm;z-index:2}
+@media print{.review-plaque.exact-template .plaque-edtek-logo{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
+/* Ajustes de impressão: QR alinhado ao quadro das três artes (Google, WhatsApp e Instagram). */
+.review-plaque.exact-template .qr-overlay{left:62.8%;top:46.7%;width:27.2%;height:27.2%}
+.review-plaque.exact-template .qr-overlay canvas{width:100%!important;height:100%!important}
+
+/* Ajustes de legibilidade e encaixe da marca na barra lateral. */
+body.app-body{font-size:15px;line-height:1.6}
+.sidebar-brand{display:flex;align-items:center;gap:8px;min-width:0;padding:2px 4px 24px}
+.sidebar-brand .brand-logo{width:108px;max-width:calc(100% - 76px);height:auto;max-height:34px;object-fit:contain;flex:0 1 108px}
+.sidebar-brand .brand-name{min-width:0;font-size:11px;letter-spacing:.45px;line-height:1.15;white-space:normal}
+.sidebar-brand .brand-name small{font-size:6.5px;letter-spacing:.65px;line-height:1.3}
+.sidebar-nav a{font-size:14px;gap:11px;padding:12px 11px}
+.sidebar-label{font-size:10px}
+.sidebar-user b{font-size:13px}
+.sidebar-user small{font-size:11px}
+.app-topbar .topbar-title>b{font-size:16px}
+.heading p,.panel p{font-size:14px;line-height:1.6}
+label{font-size:14px;line-height:1.45}
+label small,.batch-form label small{display:block;font-size:12px;line-height:1.5;margin-top:6px}
+input,select,textarea{font-size:15px}
+button,.button{font-size:14px}
+th{font-size:11px}
+td{font-size:14px}
+@media(max-width:800px){
+ .sidebar-brand .brand-logo{width:108px;max-height:34px}
+ .sidebar-brand .brand-name{font-size:11px}
+}

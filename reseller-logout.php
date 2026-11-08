@@ -1,0 +1,1 @@
+<?php require __DIR__.'/app/bootstrap.php';unset($_SESSION['reseller_id'],$_SESSION['reseller_name']);session_regenerate_id(true);header('Location: reseller-login.php');exit;

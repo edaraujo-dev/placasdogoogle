@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/app/bootstrap.php';
+require __DIR__ . '/app/customer.php';
 require_login();
 
 $raw = (string)($_GET['ids'] ?? '');
@@ -10,9 +11,11 @@ if (!$ids || count($ids) > 500) {
     exit('Selecione de 1 a 500 placas para imprimir.');
 }
 $marks = implode(',', array_fill(0, count($ids), '?'));
-$stmt = db()->prepare("SELECT id, code, activation_code FROM plaques WHERE id IN ($marks) ORDER BY id ASC");
+$stmt = db()->prepare("SELECT id, code, activation_code_encrypted FROM plaques WHERE id IN ($marks) ORDER BY id ASC");
 $stmt->execute($ids);
 $plaques = $stmt->fetchAll();
+foreach ($plaques as &$plaque) { $plaque['activation_code'] = decrypt_app_secret($plaque['activation_code_encrypted'] ?? null); }
+unset($plaque);
 if (!$plaques) { http_response_code(404); exit('Nenhuma placa encontrada.'); }
 $base = rtrim($config['base_url'], '/');
 ?><!doctype html>
@@ -56,7 +59,7 @@ body{margin:0;font-family:Arial,sans-serif;color:#16345a;background:#eef3f8}
  <div class="sub">Aponte a câmera do celular para o QR Code</div>
  <div class="qr" data-url="<?=e($qrUrl)?>"></div>
  <div class="call">AVALIE AGORA</div>
- <div class="activation"><span>PLACA: <strong><?=e($p['code'])?></strong></span><span>ATIVAÇÃO: <strong><?=e($p['activation_code'] ?? 'N/D')?></strong></span></div>
+ <div class="activation"><span>PLACA: <strong><?=e($p['code'])?></strong></span><span>ATIVAÇÃO: <strong><?=e($p['activation_code'] ?: 'N/D')?></strong></span></div>
  <div class="footer">Desenvolvido por Edtek Soluções em Informática</div>
 </section>
 <?php endforeach; ?>
