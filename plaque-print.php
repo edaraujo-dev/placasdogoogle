@@ -59,7 +59,7 @@ body{margin:0;font-family:Arial,sans-serif;color:#16345a;background:#eef3f8}
  <div class="sub">Aponte a câmera do celular para o QR Code</div>
  <div class="qr" data-url="<?=e($qrUrl)?>"></div>
  <div class="call">AVALIE AGORA</div>
- <div class="activation"><span>PLACA: <strong><?=e($p['code'])?></strong></span><span>ATIVAÇÃO: <strong><?=e($p['activation_code'] ?? 'N/D')?></strong></span></div>
+ <div class="activation"><span>PLACA: <strong><?=e($p['code'])?></strong></span><span>ATIVAÇÃO: <strong><?=e($p['activation_code'] ?: 'N/D')?></strong></span></div>
  <div class="footer">Desenvolvido por Edtek Soluções em Informática</div>
 </section>
 <?php endforeach; ?>
