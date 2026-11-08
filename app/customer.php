@@ -39,8 +39,9 @@ function send_app_email(string $to, string $subject, string $html): bool {
         if (!$cmd('AUTH LOGIN',[334]) || !$cmd(base64_encode($s['username']),[334]) || !$cmd(base64_encode($password),[235])) { fclose($fp); return false; }
     }
     $from=(string)$s['from_email'];
+    $encodeHeader=static fn(string $value): string => function_exists('mb_encode_mimeheader') ? mb_encode_mimeheader($value) : $value;
     if (!$cmd('MAIL FROM:<'.$from.'>',[250]) || !$cmd('RCPT TO:<'.$to.'>',[250,251]) || !$cmd('DATA',[354])) { fclose($fp); return false; }
-    $headers='From: '.mb_encode_mimeheader($s['from_name']).' <'.$from.">\r\nTo: <".$to.">\r\nSubject: ".mb_encode_mimeheader($subject)."\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
+    $headers='From: '.$encodeHeader((string)$s['from_name']).' <'.$from.">\r\nTo: <".$to.">\r\nSubject: ".$encodeHeader($subject)."\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
     if (!empty($s['reply_to'])) $headers.='Reply-To: '.$s['reply_to']."\r\n";
     $body=$headers."\r\n".$html;
     fwrite($fp,preg_replace('/\r?\n\./', "\r\n..", $body)."\r\n.\r\n");
