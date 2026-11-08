@@ -19,8 +19,8 @@ foreach ($plaques as &$plaque) {
     $plaque['product_type'] = in_array(($plaque['product_type'] ?? ''), ['google_review', 'whatsapp', 'instagram'], true) ? $plaque['product_type'] : 'google_review';
     $plaque['artwork'] = [
         'google_review' => 'assets/avaliacao_google.jpeg',
-        'whatsapp' => 'assets/acesso_whatsapp.jpeg',
-        'instagram' => 'assets/acesso_instagram.jpeg',
+        'whatsapp' => 'assets/placa whatsapp.png',
+        'instagram' => 'assets/placa instagram.png',
     ][$plaque['product_type']];
     $plaque['label'] = [
         'google_review' => 'Google Avaliações',
