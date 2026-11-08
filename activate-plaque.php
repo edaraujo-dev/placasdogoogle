@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   $log=$pdo->prepare('INSERT INTO plaque_activation_attempts(plaque_id,ip_hash) VALUES(?,?)');$log->execute([$p?(int)$p['id']:null,$ipHash]);
   if(!$p||$p['status']!=='stock'||empty($p['activation_code_hash'])){$pdo->commit();throw new RuntimeException('Placa não disponível para ativação. Confira o código ou fale com o suporte.');}
   if(!password_verify($key,$p['activation_code_hash'])){$pdo->commit();throw new RuntimeException('Chave de ativação inválida. Confira a chave impressa e tente novamente.');}
-  $q=$pdo->prepare("UPDATE plaques SET company_id=?,activated_by_user_id=?,status='active',activated_at=NOW(),activation_code_hash=NULL,activation_code_hint=NULL WHERE id=? AND status='stock'");
+  $q=$pdo->prepare("UPDATE plaques SET company_id=?,activated_by_user_id=?,status='active',activated_at=NOW(),activation_code_hash=NULL,activation_code_encrypted=NULL,activation_code_hint=NULL WHERE id=? AND status='stock'");
   $q->execute([$account['company_id'],$account['id'],$p['id']]);if($q->rowCount()!==1)throw new RuntimeException('A placa foi ativada em outra sessão. Atualize a página.');
   $pdo->commit();$success='Placa '.$code.' ativada e vinculada à sua empresa. Agora configure o destino.';
  }catch(Throwable $e){if(isset($pdo)&&$pdo->inTransaction())$pdo->rollBack();$error=$e instanceof RuntimeException?$e->getMessage():'Não foi possível ativar a placa.';}
