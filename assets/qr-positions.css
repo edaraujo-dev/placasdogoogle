@@ -1,0 +1,14 @@
+/* Posicionamento individual dos QR Codes nas artes originais 100x100mm.
+   Coordenadas normalizadas sobre a imagem quadrada de 1000x1000px. */
+.review-plaque.exact-template.product-instagram .qr-overlay{
+  left:64%;
+  top:51.2%;
+  width:23%;
+  height:23%;
+}
+.review-plaque.exact-template.product-whatsapp .qr-overlay{
+  left:63.9%;
+  top:47.9%;
+  width:24%;
+  height:24%;
+}
