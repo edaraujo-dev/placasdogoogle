@@ -21,6 +21,9 @@ CREATE TABLE projects (
   INDEX idx_projects_status(status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+ALTER TABLE projects ADD COLUMN company_id BIGINT UNSIGNED NULL AFTER id;
+ALTER TABLE projects ADD CONSTRAINT fk_projects_company FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE;
+
 ALTER TABLE companies
   ADD CONSTRAINT fk_companies_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL;
 
