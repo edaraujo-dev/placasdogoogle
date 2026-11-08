@@ -76,3 +76,7 @@ body.public-modal-page{position:relative;overflow-x:hidden;display:flex;flex-dir
 .support-float{position:fixed;right:22px;bottom:22px;z-index:100;display:flex;align-items:center;gap:9px;padding:12px 17px;border-radius:999px;background:#20b968;color:#fff;text-decoration:none;font-size:12px;font-weight:800;box-shadow:0 9px 28px #0b7a4545;transition:transform .18s,box-shadow .18s}
 .support-float:hover{transform:translateY(-2px);box-shadow:0 13px 32px #0b7a4555}.support-float-icon{font-size:19px;line-height:1}
 @media(max-width:520px){.brand-logo{width:122px}.support-float{right:14px;bottom:14px;padding:12px 14px}.support-float>span:last-child{display:none}}
+
+/* Assinatura oficial Edtek na arte impressa do lote */
+.review-plaque.exact-template .plaque-edtek-logo{position:absolute;left:4.5%;top:88.2%;width:19%;height:7%;object-fit:contain;object-position:left center;background:#fff;padding:1mm;z-index:2}
+@media print{.review-plaque.exact-template .plaque-edtek-logo{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
