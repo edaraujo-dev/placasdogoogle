@@ -14,6 +14,23 @@ function current_customer(): array {
     return $account;
 }
 function client_csrf_field(): string { return '<input type="hidden" name="csrf" value="'.e(csrf_token()).'">'; }
+
+function app_crypto_key(): string {
+    global $config;
+    return hash('sha256',(string)($config['db']['pass']??'').'|'.(string)($config['base_url']??'').'|edtek-review-mail',true);
+}
+function encrypt_app_secret(string $plain): ?string {
+    if (!function_exists('openssl_encrypt')) return null;
+    $iv=random_bytes(16);$cipher=openssl_encrypt($plain,'aes-256-cbc',app_crypto_key(),OPENSSL_RAW_DATA,$iv);
+    return $cipher===false?null:base64_encode($iv.$cipher);
+}
+function decrypt_app_secret(?string $encoded): string {
+    if (!$encoded || !function_exists('openssl_decrypt')) return '';
+    $raw=base64_decode($encoded,true);
+    if ($raw===false||strlen($raw)<=16) return '';
+    return openssl_decrypt(substr($raw,16),'aes-256-cbc',app_crypto_key(),OPENSSL_RAW_DATA,substr($raw,0,16))?:'';
+}
+
 function send_app_email(string $to, string $subject, string $html): bool {
     $s = db()->query('SELECT * FROM email_settings WHERE id=1')->fetch();
     if (!$s || !$s['host'] || !$s['from_email']) return false;
