@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/app/bootstrap.php';
+require __DIR__ . '/app/customer.php';
 require_login();
 
 $raw = (string)($_GET['ids'] ?? '');
@@ -10,9 +11,11 @@ if (!$ids || count($ids) > 500) {
     exit('Selecione de 1 a 500 placas para imprimir.');
 }
 $marks = implode(',', array_fill(0, count($ids), '?'));
-$stmt = db()->prepare("SELECT id, code, activation_code FROM plaques WHERE id IN ($marks) ORDER BY id ASC");
+$stmt = db()->prepare("SELECT id, code, activation_code_encrypted FROM plaques WHERE id IN ($marks) ORDER BY id ASC");
 $stmt->execute($ids);
 $plaques = $stmt->fetchAll();
+foreach ($plaques as &$plaque) { $plaque['activation_code'] = decrypt_app_secret($plaque['activation_code_encrypted'] ?? null); }
+unset($plaque);
 if (!$plaques) { http_response_code(404); exit('Nenhuma placa encontrada.'); }
 $base = rtrim($config['base_url'], '/');
 ?><!doctype html>
