@@ -71,7 +71,7 @@ function layout_start(string $title): void {
     $flash = get_flash();
     $active = basename($_SERVER['PHP_SELF'] ?? 'dashboard.php');
     echo '<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">';
-    echo '<meta name="theme-color" content="#101d36"><title>' . e($title) . ' | Edtek Review</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css"></head><body class="app-body">';
+    echo '<meta name="theme-color" content="#101d36"><title>' . e($title) . ' | Edtek Review</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/qr-positions.css"></head><body class="app-body">';
     if (is_logged_in()) {
         echo '<div class="app-layout"><aside class="sidebar" id="app-sidebar"><a href="dashboard.php" class="brand sidebar-brand"><img class="brand-logo" src="assets/logo%20edtek.png" alt="Edtek Soluções"><span class="brand-name">REVIEW<small>GESTÃO DE AVALIAÇÕES</small></span></a><div class="sidebar-label">MENU PRINCIPAL</div><nav class="sidebar-nav">';
         $items = [
