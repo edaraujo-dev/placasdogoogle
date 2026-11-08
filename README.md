@@ -108,7 +108,8 @@ QR Code e NFC continuam apontando para a mesma URL dinâmica `/r/CODIGO`. Altera
 ### Projetos e inventário
 
 - **Projetos**: agrupe placas por cliente, unidade ou campanha; projetos podem ser associados a uma empresa.
-- **Placas geradas**: inventário com lote, produto, empresa, revendedor, projeto, leituras e status.
+- **Placas geradas**: inventário com lote, produto, empresa, revendedor, projeto, leituras, status e atalho para reimprimir cada unidade.
+- Para permitir reimpressão, a chave de ativação também é guardada criptografada (além do hash de validação) e apagada quando a placa é ativada. Placas geradas antes da v1.0 não têm como recuperar a chave original a partir do hash e podem aparecer com `N/D` na reimpressão.
 - **Revendedores**: cadastro, login e portal para registrar placas adquiridas em marketplaces. Para reivindicar uma placa, o revendedor informa o código e a chave impressa no formato `ED00000001:CHAVE`. A chave é verificada, mas permanece válida para a ativação final pelo comprador.
 
 ### SMTP e DNS
@@ -126,7 +127,7 @@ SPF/DKIM/DMARC melhoram autenticação e entregabilidade, mas não garantem que 
 
 - `config.php` nunca deve ser substituído pelo pacote.
 - As senhas das contas usam `password_hash()`; tokens de recuperação são aleatórios, armazenados como hash e expiram em uma hora.
-- A senha SMTP é criptografada usando chave derivada da configuração local do banco e URL-base; preserve esses valores ao migrar o banco. Se trocar as credenciais do banco ou a URL-base, salve novamente a senha SMTP.
+- A senha SMTP e as chaves de ativação para reimpressão são criptografadas usando chave derivada da configuração local do banco e URL-base; preserve esses valores ao migrar o banco. Se trocar as credenciais do banco ou a URL-base, salve novamente a senha SMTP. As chaves de placas existentes antes da v1.0 não podem ser recuperadas do hash.
 - Faça testes com uma placa de estoque antes de ativar lotes reais.
 - A integração SMTP depende das extensões OpenSSL e sockets do PHP e de conexões de saída liberadas no cPanel.
 - O portal de revendedor é um controle de inventário; a compra/pagamento dos kits continua ocorrendo no marketplace, fora do sistema.
