@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require __DIR__.'/app/bootstrap.php'; require __DIR__.'/app/customer.php';
 if(customer_logged_in()){header('Location: customer-dashboard.php');exit;}
-$nextCode=preg_match('/^ED[0-9]{8}$/',strtoupper($_GET['code']??''))?strtoupper($_GET['code']):'';
+$nextCode=preg_match('/^ED[0-9]{8}$/',strtoupper($_GET['code']??($_POST['code']??'')))?strtoupper($_GET['code']):'';
 $error='';
 if($_SERVER['REQUEST_METHOD']==='POST'){verify_csrf();$email=strtolower(trim($_POST['email']??''));$q=db()->prepare("SELECT id,name,password_hash FROM customer_accounts WHERE email=? AND status='active' LIMIT 1");$q->execute([$email]);$a=$q->fetch();if($a&&password_verify((string)($_POST['password']??''),$a['password_hash'])){session_regenerate_id(true);$_SESSION['customer_id']=$a['id'];$_SESSION['customer_name']=$a['name'];$go=(($_POST['next']??'')==='activate'&&$nextCode!=='')?'activate-plaque.php?code='.rawurlencode($nextCode):'customer-dashboard.php';header('Location: '.$go);exit;}$error='E-mail ou senha inválidos.';}
 layout_start('Entrar na conta');
