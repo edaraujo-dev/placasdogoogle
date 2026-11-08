@@ -71,3 +71,62 @@ Esta versão moderniza os módulos que já existem no MVP. Cadastro/login de rev
 - Página de leitura QR/NFC reformulada: estado de placa inativa ou inexistente aparece em um modal/card central responsivo, com identidade visual Edtek Review; não há mais conteúdo HTML simples por trás do modal.
 - Estilos específicos para telas pequenas e preservação do fluxo de impressão 100 × 100 mm.
 - Não exige alteração no banco de dados. Preserve `config.php` durante a atualização.
+
+## v1.0 — contas, ativação pelo comprador e múltiplos produtos
+
+### Atualização em cPanel
+
+1. Faça backup dos arquivos e do banco.
+2. Confirme que a versão v0.4 (colunas `activation_code_hash`, `activation_code_hint` e `batch_ref`) já está aplicada.
+3. Importe `upgrade-v1.0.sql` uma única vez no phpMyAdmin.
+4. Envie os arquivos desta branch para a instalação, preservando o `config.php` atual e os diretórios de uploads/arquivos próprios.
+5. Configure o SMTP em **Configurar e-mail** no painel administrativo e use o botão de teste.
+6. Teste cadastro, ativação, redirecionamento, recuperação de senha e impressão antes de disponibilizar aos clientes.
+
+Para uma instalação nova: importe `schema.sql` e depois `upgrade-v1.0.sql`. A migração v1.0 pressupõe a estrutura base v0.4.
+
+### Portal do comprador
+
+- `customer-register.php`: cadastro do comprador e da empresa.
+- `customer-login.php`: login do cliente.
+- `activate-plaque.php`: ativação com código da placa e chave individual impressa.
+- `customer-dashboard.php`: placas vinculadas e leituras.
+- `customer-plaque.php`: configuração individual do produto e destino.
+- A página pública de uma placa em estoque apresenta **Entrar** e **Criar minha conta**, mantendo o código da placa durante o fluxo.
+- A ativação usa transação e bloqueio de linha (`SELECT ... FOR UPDATE`); ao concluir, o hash da chave é apagado. A mesma chave não pode ativar a placa novamente.
+- O portal do revendedor confere a chave impressa para reivindicar placas, mas não a consome; o comprador ainda pode ativá-la posteriormente.
+
+### Produtos e destinos
+
+Cada placa tem seu próprio tipo e destino, sem compartilhar a configuração com outras placas da mesma empresa:
+- `google_review`: URL HTTPS de avaliação Google.
+- `whatsapp`: telefone com DDI/DDD e mensagem pré-preenchida opcional.
+- `instagram`: URL HTTPS do perfil.
+
+QR Code e NFC continuam apontando para a mesma URL dinâmica `/r/CODIGO`. Alterar o destino no portal não exige reimprimir o QR nem regravar o chip.
+
+### Projetos e inventário
+
+- **Projetos**: agrupe placas por cliente, unidade ou campanha; projetos podem ser associados a uma empresa.
+- **Placas geradas**: inventário com lote, produto, empresa, revendedor, projeto, leituras e status.
+- **Revendedores**: cadastro, login e portal para registrar placas adquiridas em marketplaces. Para reivindicar uma placa, o revendedor informa o código e a chave impressa no formato `ED00000001:CHAVE`. A chave é verificada, mas permanece válida para a ativação final pelo comprador.
+
+### SMTP e DNS
+
+A tela **Configurar e-mail** armazena host, porta, usuário, senha criptografada, modo SSL/STARTTLS, remetente e Reply-To. O teste verifica o envio a partir do servidor; o provedor de hospedagem ainda precisa permitir conexões SMTP de saída.
+
+O sistema não consegue criar registros DNS automaticamente. No painel DNS do domínio, publique os valores exatos fornecidos pelo provedor de e-mail:
+- SPF: um único registro TXT SPF consolidado com todos os serviços que enviam pelo domínio.
+- DKIM: registro(s) TXT/CNAME e seletor(es) indicados pelo provedor.
+- DMARC: TXT em `_dmarc.seudominio`; comece com política de monitoramento (`p=none`) e só aumente a política após analisar os relatórios.
+
+SPF/DKIM/DMARC melhoram autenticação e entregabilidade, mas não garantem que todas as mensagens cheguem à caixa de entrada. Verifique também reputação do domínio/IP, alinhamento do remetente, conteúdo e limites do provedor. Não publique dois registros SPF separados.
+
+### Segurança e limites
+
+- `config.php` nunca deve ser substituído pelo pacote.
+- As senhas das contas usam `password_hash()`; tokens de recuperação são aleatórios, armazenados como hash e expiram em uma hora.
+- A senha SMTP é criptografada usando chave derivada da configuração local do banco e URL-base; preserve esses valores ao migrar o banco. Se trocar as credenciais do banco ou a URL-base, salve novamente a senha SMTP.
+- Faça testes com uma placa de estoque antes de ativar lotes reais.
+- A integração SMTP depende das extensões OpenSSL e sockets do PHP e de conexões de saída liberadas no cPanel.
+- O portal de revendedor é um controle de inventário; a compra/pagamento dos kits continua ocorrendo no marketplace, fora do sistema.
