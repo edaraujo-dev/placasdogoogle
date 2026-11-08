@@ -116,8 +116,8 @@ layout_start('Gerar placas');
       <?php
       $artwork = [
         'google_review' => 'assets/avaliacao_google.jpeg',
-        'whatsapp' => 'assets/acesso_whatsapp.jpeg',
-        'instagram' => 'assets/acesso_instagram.jpeg',
+        'whatsapp' => 'assets/placa whatsapp.png',
+        'instagram' => 'assets/placa instagram.png',
       ][$productType] ?? 'assets/plaque-template.png';
       $artworkLabel = [
         'google_review' => 'Google Avaliações',
