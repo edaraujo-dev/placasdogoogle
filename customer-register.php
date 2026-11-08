@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
    $q=$pdo->prepare('SELECT id FROM customer_accounts WHERE email=?');$q->execute([$email]);if($q->fetch())throw new RuntimeException('Este e-mail já possui cadastro.');
    $q=$pdo->prepare("INSERT INTO companies(name,contact_name,email,google_review_url,product_type,status) VALUES(?,?,?,NULL,'google_review','active')");$q->execute([$company,$name,$email]);$companyId=(int)$pdo->lastInsertId();
    $q=$pdo->prepare("INSERT INTO customer_accounts(company_id,name,email,password_hash,status) VALUES(?,?,?,?, 'active')");$q->execute([$companyId,$name,$email,password_hash($pass,PASSWORD_DEFAULT)]);$id=(int)$pdo->lastInsertId();
-   $pdo->commit();session_regenerate_id(true);$_SESSION['customer_id']=$id;$_SESSION['customer_name']=$name;
+   $pdo->commit();session_regenerate_id(true);unset($_SESSION['admin_id'],$_SESSION['reseller_id']);$_SESSION['customer_id']=$id;$_SESSION['customer_name']=$name;
    @send_app_email($email,'Bem-vindo ao Edtek Review',mail_template('Bem-vindo ao Edtek Review','Sua conta foi criada. Agora você pode ativar suas placas e configurar seus destinos.',app_url('customer-dashboard.php'),'Acessar minha conta'));
    $go=(($_POST['next']??'')==='activate'&&$nextCode!=='')?'activate-plaque.php?code='.rawurlencode($nextCode):'customer-dashboard.php';header('Location: '.$go);exit;
   }catch(Throwable $e){if(isset($pdo)&&$pdo->inTransaction())$pdo->rollBack();$error=$e instanceof RuntimeException?$e->getMessage():'Não foi possível concluir o cadastro. Tente novamente.';}
