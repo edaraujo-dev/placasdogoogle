@@ -103,3 +103,12 @@ CREATE TABLE reseller_kit_orders (
 
 -- Migra o destino antigo do Google para a coluna genérica usada pelo roteador.
 UPDATE companies SET destination_url=google_review_url WHERE destination_url IS NULL AND google_review_url IS NOT NULL;
+
+CREATE TABLE plaque_activation_attempts (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  plaque_id BIGINT UNSIGNED NULL,
+  ip_hash CHAR(64) NOT NULL,
+  attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_activation_attempt_plaque FOREIGN KEY (plaque_id) REFERENCES plaques(id) ON DELETE SET NULL,
+  INDEX idx_activation_attempt_ip_date(ip_hash,attempted_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
