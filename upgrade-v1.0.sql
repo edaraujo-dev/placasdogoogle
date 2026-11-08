@@ -7,8 +7,7 @@ ALTER TABLE companies
   ADD COLUMN destination_url TEXT NULL AFTER product_type,
   ADD COLUMN whatsapp_phone VARCHAR(30) NULL AFTER destination_url,
   ADD COLUMN whatsapp_message VARCHAR(500) NULL AFTER whatsapp_phone,
-  ADD COLUMN instagram_url VARCHAR(500) NULL AFTER whatsapp_message,
-  ADD COLUMN project_id BIGINT UNSIGNED NULL AFTER status;
+  ADD COLUMN instagram_url VARCHAR(500) NULL AFTER whatsapp_message;
 
 CREATE TABLE projects (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -23,9 +22,6 @@ CREATE TABLE projects (
 
 ALTER TABLE projects ADD COLUMN company_id BIGINT UNSIGNED NULL AFTER id;
 ALTER TABLE projects ADD CONSTRAINT fk_projects_company FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE;
-
-ALTER TABLE companies
-  ADD CONSTRAINT fk_companies_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL;
 
 CREATE TABLE customer_accounts (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
