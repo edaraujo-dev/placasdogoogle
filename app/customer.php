@@ -16,10 +16,7 @@ function current_customer(): array {
 function client_csrf_field(): string { return '<input type="hidden" name="csrf" value="'.e(csrf_token()).'">'; }
 function send_app_email(string $to, string $subject, string $html): bool {
     $s = db()->query('SELECT * FROM email_settings WHERE id=1')->fetch();
-    if (!$s || !$s['host'] || !$s['from_email']) {
-        $headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=UTF-8\r\nFrom: ".mb_encode_mimeheader($s['from_name'] ?? 'Edtek Review')." <".($s['from_email'] ?? 'no-reply@localhost').">";
-        return @mail($to, mb_encode_mimeheader($subject), $html, $headers);
-    }
+    if (!$s || !$s['host'] || !$s['from_email']) return false;
     $crypto = hash('sha256', (string)($GLOBALS['config']['db']['pass'] ?? '').'|'.(string)($GLOBALS['config']['base_url'] ?? '').'|edtek-review-mail', true);
     $password = '';
     if (!empty($s['password_encrypted'])) {
