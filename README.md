@@ -131,3 +131,18 @@ SPF/DKIM/DMARC melhoram autenticação e entregabilidade, mas não garantem que 
 - Faça testes com uma placa de estoque antes de ativar lotes reais.
 - A integração SMTP depende das extensões OpenSSL e sockets do PHP e de conexões de saída liberadas no cPanel.
 - O portal de revendedor é um controle de inventário; a compra/pagamento dos kits continua ocorrendo no marketplace, fora do sistema.
+
+
+## Correção de instalação v1.0 parcialmente aplicada (cPanel)
+
+Use este procedimento quando o banco já recebeu parte da v1.0, quando a coluna `activation_code_encrypted` foi criada manualmente ou quando as páginas de clientes/projetos/revendedores não abrem.
+
+1. Faça backup completo do banco e dos arquivos.
+2. No phpMyAdmin, selecione explicitamente o banco `estarb84_review` (ou o banco configurado no seu `config.php`).
+3. Importe **`upgrade-v1.0-recovery.sql`**. Esse arquivo verifica a existência de colunas e constraints antes de criá-las e usa `CREATE TABLE IF NOT EXISTS` para não recriar tabelas existentes.
+4. Não execute novamente o `upgrade-v1.0.sql` original depois de usar a recuperação. Ele não foi escrito para reexecução e pode falhar por colunas/constraints duplicadas.
+5. Preserve o `config.php` atual. Depois da migração, entre novamente no painel e teste primeiro com uma placa de teste.
+
+A migração de recuperação cria as tabelas de clientes, projetos, revendedores, pedidos de kits, SMTP, redefinição de senha e tentativas de ativação; adiciona os campos de destino Google/WhatsApp/Instagram e os vínculos necessários nas placas; preserva as empresas e placas existentes. Ela não configura credenciais SMTP e não envia dados para serviços externos.
+
+Após importar, confira se aparecem as tabelas `projects`, `customer_accounts`, `password_resets`, `email_settings`, `reseller_accounts`, `reseller_kit_orders`, `plaque_activation_attempts` e `edtek_schema_migrations`.
