@@ -41,6 +41,7 @@ if (!$plaques) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Impressão de placas | Edtek Review</title>
 <link rel="stylesheet" href="<?=e(app_url('assets/style.css'))?>">
+<link rel="stylesheet" href="<?=e(app_url('assets/qr-positions.css'))?>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
 <style>
 @page{size:A4;margin:8mm}
