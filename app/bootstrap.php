@@ -79,6 +79,10 @@ function layout_start(string $title): void {
             ['companies.php','Clínicas','⌂'],
             ['plaques.php','Placas','▦'],
             ['plaque-batch.php','Gerar placas','＋'],
+            ['generated-plaques.php','Placas geradas','▤'],
+            ['projects.php','Projetos','▧'],
+            ['resellers.php','Revendedores','♙'],
+            ['email-settings.php','Configurar e-mail','✉'],
             ['https://wa.me/5521991928446','Suporte WhatsApp','?'],
         ];
         foreach ($items as [$href,$label,$icon]) {
