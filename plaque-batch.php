@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/app/bootstrap.php';
+require __DIR__ . '/app/customer.php';
 require_login();
 
 $created = [];
@@ -17,13 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = db();
         $pdo->beginTransaction();
         try {
-            $insert = $pdo->prepare("INSERT INTO plaques (code, status, activation_code_hash, activation_code_hint, batch_ref) VALUES (?, 'stock', ?, ?, ?)");
+            $insert = $pdo->prepare("INSERT INTO plaques (code, status, activation_code_hash, activation_code_encrypted, activation_code_hint, batch_ref) VALUES (?, 'stock', ?, ?, ?, ?)");
             $update = $pdo->prepare('UPDATE plaques SET code = ? WHERE id = ?');
             $batchRef = strtoupper(bin2hex(random_bytes(8)));
             for ($i = 0; $i < $qty; $i++) {
                 $placeholder = 'TMP' . bin2hex(random_bytes(12));
                 $activation = strtoupper(substr(bin2hex(random_bytes(6)), 0, 10));
-                $insert->execute([$placeholder, password_hash($activation, PASSWORD_DEFAULT), substr($activation, -4), $batchRef]);
+                $insert->execute([$placeholder, password_hash($activation, PASSWORD_DEFAULT), encrypt_app_secret($activation), substr($activation, -4), $batchRef]);
                 $id = (int)$pdo->lastInsertId();
                 $code = 'ED' . str_pad((string)$id, 8, '0', STR_PAD_LEFT);
                 $update->execute([$code, $id]);
