@@ -91,7 +91,7 @@ function layout_start(string $title): void {
         }
         echo '</nav><div class="sidebar-bottom"><div class="sidebar-user"><span class="user-avatar">E</span><span><b>Administrador</b><small>Edtek Review</small></span></div><a class="sidebar-logout" href="logout.php">↪ <span>Sair do sistema</span></a></div></aside><div class="sidebar-scrim" data-sidebar-close></div><section class="app-main"><header class="app-topbar"><button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" data-sidebar-toggle><span></span><span></span><span></span></button><div class="topbar-title"><span>EDTEK REVIEW</span><b>' . e($title) . '</b></div><div class="topbar-right"><span class="online-dot"></span><span>Painel administrativo</span><span class="topbar-avatar">E</span></div></header><main class="wrap">';
     } else {
-        echo '<header class="login-top"><a href="login.php" class="brand"><span class="brand-mark">E</span><span class="brand-name">EDTEK <b>REVIEW</b><small>GESTÃO DE AVALIAÇÕES</small></span></a></header><main class="wrap login-wrap">';
+        echo '<header class="login-top"><a href="login.php" class="brand"><img class="brand-logo" src="assets/logo%20edtek.png" alt="Edtek Soluções"><span class="brand-name">REVIEW<small>GESTÃO DE AVALIAÇÕES</small></span></a></header><main class="wrap login-wrap">';
     }
     if ($flash) {
         $kind = ($flash['type'] ?? '') === 'error' ? 'error' : 'success';
