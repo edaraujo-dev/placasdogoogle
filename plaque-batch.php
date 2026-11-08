@@ -7,18 +7,24 @@ require_login();
 $created = [];
 $error = '';
 $qty = 5;
+$productType = 'google_review';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
+    $productType = (string)($_POST['product_type'] ?? 'google_review');
+    if (!in_array($productType, ['google_review', 'whatsapp', 'instagram'], true)) {
+        $productType = 'google_review';
+        $error = 'Selecione um tipo de placa válido.';
+    }
     $raw = (($_POST['quantity_choice'] ?? '') === 'custom') ? ($_POST['custom_quantity'] ?? '') : ($_POST['quantity_choice'] ?? '');
     $qty = filter_var($raw, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 500]]) ?: 0;
-    if (!$qty) {
+    if (!$qty && !$error) {
         $error = 'Informe uma quantidade entre 1 e 500.';
-    } else {
+    } elseif (!$error) {
         $pdo = db();
         try {
             $pdo->beginTransaction();
-            $insert = $pdo->prepare("INSERT INTO plaques (code, status, activation_code_hash, activation_code_encrypted, activation_code_hint, batch_ref) VALUES (?, 'stock', ?, ?, ?, ?)");
+            $insert = $pdo->prepare("INSERT INTO plaques (code, status, product_type, activation_code_hash, activation_code_encrypted, activation_code_hint, batch_ref) VALUES (?, 'stock', ?, ?, ?, ?, ?)");
             $update = $pdo->prepare('UPDATE plaques SET code = ? WHERE id = ?');
             $batchRef = strtoupper(bin2hex(random_bytes(8)));
             for ($i = 0; $i < $qty; $i++) {
@@ -28,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($encrypted === null) {
                     throw new RuntimeException('A extensão OpenSSL não está disponível para criptografar as chaves de ativação.');
                 }
-                $insert->execute([$placeholder, password_hash($activation, PASSWORD_DEFAULT), $encrypted, substr($activation, -4), $batchRef]);
+                $insert->execute([$placeholder, $productType, password_hash($activation, PASSWORD_DEFAULT), $encrypted, substr($activation, -4), $batchRef]);
                 $id = (int)$pdo->lastInsertId();
                 $code = 'ED' . str_pad((string)$id, 8, '0', STR_PAD_LEFT);
                 $update->execute([$code, $id]);
@@ -58,6 +64,14 @@ layout_start('Gerar placas');
 <?php if ($error): ?><div class="notice error"><?=e($error)?></div><?php endif; ?>
 <form method="post" class="panel batch-form">
   <input type="hidden" name="csrf" value="<?=e(csrf_token())?>">
+  <label>Tipo de placa
+    <select name="product_type" required>
+      <option value="google_review" <?=$productType==='google_review'?'selected':''?>>Google Avaliações</option>
+      <option value="whatsapp" <?=$productType==='whatsapp'?'selected':''?>>WhatsApp</option>
+      <option value="instagram" <?=$productType==='instagram'?'selected':''?>>Instagram</option>
+    </select>
+    <small>O tipo ficará gravado em todas as placas deste lote. O cliente configura o destino após ativar a placa.</small>
+  </label>
   <label>Quantidade de placas
     <select name="quantity_choice" id="quantity" required>
       <option value="1" <?=$qty===1?'selected':''?>>1 placa</option>
