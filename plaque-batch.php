@@ -73,7 +73,7 @@ layout_start('Gerar placas');
     <article class="review-plaque exact-template">
       <img class="plaque-art" src="assets/plaque-template.png" alt="Arte oficial da placa Edtek Review com NFC e QR Code">
       <div class="qr-overlay" data-qr="<?=e($item['url'])?>" aria-label="QR Code dinâmico individual"></div>
-      <div class="plaque-identification"><strong><?=e($item['code'])?></strong><span>ATIVAÇÃO: <?=e($item['activation'])?></span></div>
+      <img class="plaque-edtek-logo" src="assets/logo%20edtek.png" alt="Edtek Soluções"><div class="plaque-identification"><strong><?=e($item['code'])?></strong><span>ATIVAÇÃO: <?=e($item['activation'])?></span></div>
     </article>
   <?php endforeach; ?>
   </div>
