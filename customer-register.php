@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require __DIR__.'/app/bootstrap.php'; require __DIR__.'/app/customer.php';
 if(customer_logged_in()){$go=(($_POST['next']??'')==='activate'&&$nextCode!=='')?'activate-plaque.php?code='.rawurlencode($nextCode):'customer-dashboard.php';header('Location: '.$go);exit;}
-$nextCode=preg_match('/^ED[0-9]{8}$/',strtoupper($_GET['code']??''))?strtoupper($_GET['code']):'';
+$nextCode=preg_match('/^ED[0-9]{8}$/',strtoupper($_GET['code']??($_POST['code']??'')))?strtoupper($_GET['code']):'';
 $error='';
 if($_SERVER['REQUEST_METHOD']==='POST'){
  verify_csrf();
