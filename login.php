@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$email]); $admin = $stmt->fetch();
     if ($admin && password_verify($_POST['password'] ?? '', $admin['password_hash'])) {
         session_regenerate_id(true);
+        unset($_SESSION['customer_id'],$_SESSION['reseller_id']);
         $_SESSION['admin_id'] = $admin['id'];
         $_SESSION['admin_name'] = $admin['name'];
         header('Location: dashboard.php'); exit;
