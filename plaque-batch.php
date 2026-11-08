@@ -16,15 +16,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Informe uma quantidade entre 1 e 500.';
     } else {
         $pdo = db();
-        $pdo->beginTransaction();
         try {
+            $pdo->beginTransaction();
             $insert = $pdo->prepare("INSERT INTO plaques (code, status, activation_code_hash, activation_code_encrypted, activation_code_hint, batch_ref) VALUES (?, 'stock', ?, ?, ?, ?)");
             $update = $pdo->prepare('UPDATE plaques SET code = ? WHERE id = ?');
             $batchRef = strtoupper(bin2hex(random_bytes(8)));
             for ($i = 0; $i < $qty; $i++) {
                 $placeholder = 'TMP' . bin2hex(random_bytes(12));
                 $activation = strtoupper(substr(bin2hex(random_bytes(6)), 0, 10));
-                $insert->execute([$placeholder, password_hash($activation, PASSWORD_DEFAULT), encrypt_app_secret($activation), substr($activation, -4), $batchRef]);
+                $encrypted = encrypt_app_secret($activation);
+                if ($encrypted === null) {
+                    throw new RuntimeException('A extensão OpenSSL não está disponível para criptografar as chaves de ativação.');
+                }
+                $insert->execute([$placeholder, password_hash($activation, PASSWORD_DEFAULT), $encrypted, substr($activation, -4), $batchRef]);
                 $id = (int)$pdo->lastInsertId();
                 $code = 'ED' . str_pad((string)$id, 8, '0', STR_PAD_LEFT);
                 $update->execute([$code, $id]);
@@ -35,10 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ];
             }
             $pdo->commit();
+            flash('Lote gerado com sucesso! ' . count($created) . ' placa(s) criada(s) e disponível(is) no estoque.');
         } catch (Throwable $ex) {
             if ($pdo->inTransaction()) $pdo->rollBack();
             $created = [];
-            $error = 'Não foi possível gerar o lote. Confirme se a atualização v0.4 do banco foi importada.';
+            error_log('Edtek Review - falha ao gerar lote: ' . $ex->getMessage());
+            $error = 'Não foi possível gerar o lote. A falha foi registrada no log do servidor. Confira a atualização do banco e tente novamente.';
         }
     }
 }
@@ -67,12 +73,12 @@ layout_start('Gerar placas');
   <button type="submit">Gerar placas e códigos</button>
 </form>
 <?php if ($created): ?>
-<section class="panel generated-panel">
+<section class="panel generated-panel" id="lote-gerado">
   <div class="heading"><div><h2>Lote criado: <?=count($created)?> placas</h2><p>As placas abaixo estão em estoque. Use a impressão em escala de 100%, sem ajustar à página.</p></div><button type="button" onclick="window.print()">Imprimir placas / Salvar PDF</button></div>
   <div class="print-grid">
   <?php foreach ($created as $item): ?>
     <article class="review-plaque exact-template">
-      <img class="plaque-art" src="assets/plaque-template.png" alt="Arte oficial da placa Edtek Review com NFC e QR Code">
+      <img class="plaque-art" src="assets/plaque-template.png" alt="Arte da placa Edtek Review com NFC e QR Code">
       <div class="qr-overlay" data-qr="<?=e($item['url'])?>" aria-label="QR Code dinâmico individual"></div>
       <img class="plaque-edtek-logo" src="assets/logo%20edtek.png" alt="Edtek Soluções"><div class="plaque-identification"><strong><?=e($item['code'])?></strong><span>ATIVAÇÃO: <?=e($item['activation'])?></span></div>
     </article>
