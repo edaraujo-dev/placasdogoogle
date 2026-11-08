@@ -1,0 +1,35 @@
+<?php
+declare(strict_types=1);
+require __DIR__.'/app/bootstrap.php';require_login();
+require __DIR__.'/app/customer.php';
+$existing=db()->query('SELECT * FROM email_settings WHERE id=1')->fetch();$error='';
+if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='save'){
+ verify_csrf();$host=trim($_POST['host']??'');$port=(int)($_POST['port']??587);$user=trim($_POST['username']??'');$pass=(string)($_POST['password']??'');$enc=$_POST['encryption']??'tls';$fromName=trim(preg_replace('/[\\r\\n]+/',' ',(string)($_POST['from_name']??'Edtek Review')));$from=trim($_POST['from_email']??'');$reply=trim($_POST['reply_to']??'');
+ if($host===''||$port<1||$port>65535||!filter_var($from,FILTER_VALIDATE_EMAIL)||($reply!==''&&!filter_var($reply,FILTER_VALIDATE_EMAIL))||!in_array($enc,['none','ssl','tls'],true))$error='Confira host, porta, segurança e e-mail remetente.';
+ else{
+  $crypto=hash('sha256',(string)($config['db']['pass']??'').'|'.(string)$config['base_url'].'|edtek-review-mail',true);$encrypted=$existing['password_encrypted']??null;
+  if($pass!==''){$iv=random_bytes(16);$cipher=openssl_encrypt($pass,'aes-256-cbc',$crypto,OPENSSL_RAW_DATA,$iv);$encrypted=base64_encode($iv.$cipher);}
+  $q=db()->prepare("INSERT INTO email_settings(id,host,port,username,password_encrypted,encryption,from_name,from_email,reply_to) VALUES(1,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE host=VALUES(host),port=VALUES(port),username=VALUES(username),password_encrypted=COALESCE(VALUES(password_encrypted),password_encrypted),encryption=VALUES(encryption),from_name=VALUES(from_name),from_email=VALUES(from_email),reply_to=VALUES(reply_to)");
+  $q->execute([$host,$port,$user,$encrypted,$enc,$fromName,$from,$reply?:null]);flash('Configurações SMTP salvas.');header('Location: email-settings.php');exit;
+ }
+}
+if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='test'){
+ verify_csrf();$to=trim($_POST['test_email']??'');
+ if(filter_var($to,FILTER_VALIDATE_EMAIL)){$ok=send_app_email($to,'Teste de envio - Edtek Review',mail_template('Teste de e-mail','Se você recebeu esta mensagem, o envio do Edtek Review está funcionando.',app_url('login.php'),'Acessar painel'));$error=$ok?'Teste enviado. Confira a caixa de entrada e o spam.':'Falha no envio. Confira host, porta, TLS, usuário e senha.';}else $error='Informe um e-mail válido.';
+}
+layout_start('Configurações de e-mail');
+?>
+<div class="heading"><div><h1>Configurações SMTP</h1><p>Envio de boas-vindas, recuperação de senha e notificações.</p></div></div>
+<?php if($error):?><div class="notice <?=str_starts_with($error,'Teste enviado')?'':'error'?>"><?=e($error)?></div><?php endif;?>
+<form method="post" class="panel"><input type="hidden" name="action" value="save"><?=client_csrf_field()?><div class="formgrid">
+<label>Servidor SMTP<input name="host" required value="<?=e($existing['host']??'')?>"></label>
+<label>Porta<input type="number" name="port" min="1" max="65535" value="<?=e((string)($existing['port']??587))?>" required></label>
+<label>Usuário<input name="username" value="<?=e($existing['username']??'')?>"></label>
+<label>Senha SMTP<input type="password" name="password" autocomplete="new-password" placeholder="<?=$existing?'Deixe em branco para manter a senha salva':'Senha do e-mail'?>"></label>
+<label>Segurança<select name="encryption"><option value="tls" <?=($existing['encryption']??'tls')==='tls'?'selected':''?>>STARTTLS / TLS</option><option value="ssl" <?=($existing['encryption']??'')==='ssl'?'selected':''?>>SSL</option><option value="none" <?=($existing['encryption']??'')==='none'?'selected':''?>>Sem criptografia</option></select></label>
+<label>Nome do remetente<input name="from_name" value="<?=e($existing['from_name']??'Edtek Review')?>" required></label>
+<label>E-mail remetente<input type="email" name="from_email" value="<?=e($existing['from_email']??'')?>" required></label>
+<label>Responder para<input type="email" name="reply_to" value="<?=e($existing['reply_to']??'')?>"></label></div><button>Salvar SMTP</button></form>
+<form method="post" class="panel"><input type="hidden" name="action" value="test"><?=client_csrf_field()?><h2>Testar envio</h2><label>Enviar mensagem de teste para<input type="email" name="test_email" placeholder="seuemail@dominio.com" required></label><button class="secondary">Enviar teste</button></form>
+<p class="notice">A senha SMTP é armazenada criptografada no banco. O envio depende da liberação de conexões SMTP pela hospedagem e da configuração DNS SPF, DKIM e DMARC do domínio.</p>
+<?php layout_end(); ?>
