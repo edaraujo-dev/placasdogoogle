@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);require __DIR__.'/app/bootstrap.php';require_login();
+declare(strict_types=1);require __DIR__.'/app/bootstrap.php';require __DIR__.'/app/customer.php';require_login();
 if($_SERVER['REQUEST_METHOD']==='POST'){verify_csrf();$name=trim($_POST['name']??'');$desc=trim($_POST['description']??'');$label=trim($_POST['client_label']??'');if($name===''){flash('Informe o nome do projeto.','error');}else{$q=db()->prepare("INSERT INTO projects(name,description,client_label) VALUES(?,?,?)");$q->execute([$name,$desc?:null,$label?:null]);flash('Projeto criado.');}header('Location: projects.php');exit;}
 $rows=db()->query("SELECT pr.*,(SELECT COUNT(*) FROM plaques p WHERE p.project_id=pr.id) plaques_count,(SELECT COUNT(*) FROM companies c WHERE c.project_id=pr.id) companies_count FROM projects pr ORDER BY pr.created_at DESC")->fetchAll();
 layout_start('Projetos');
