@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$plaqueId]);
     if (!$stmt->fetch()) { flash('Placa indisponível ou já vinculada.', 'error'); }
     else {
-        $stmt = db()->prepare("UPDATE plaques SET company_id=?, status='active', activated_at=NOW() WHERE id=? AND status='stock' AND company_id IS NULL");
+        $stmt = db()->prepare("UPDATE plaques SET company_id=?, status='active', activated_at=NOW(), activation_code_hash=NULL, activation_code_encrypted=NULL, activation_code_hint=NULL WHERE id=? AND status='stock' AND company_id IS NULL");
         $stmt->execute([$companyId, $plaqueId]);
         flash($stmt->rowCount() ? 'Placa ativada com sucesso.' : 'Não foi possível ativar a placa.', $stmt->rowCount() ? 'success' : 'error');
     }
