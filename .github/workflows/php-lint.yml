@@ -1,9 +1,6 @@
 name: PHP syntax check
 on:
   push:
-    branches:
-      - main
-      - feature/fluxo-contas-ativacao-edtek-review
   pull_request:
     branches:
       - main
