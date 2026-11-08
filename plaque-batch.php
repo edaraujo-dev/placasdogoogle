@@ -86,6 +86,27 @@ layout_start('Gerar placas');
   </label>
   <button type="submit">Gerar placas e códigos</button>
 </form>
+<script>
+(function(){
+ const select=document.getElementById('quantity');
+ const wrap=document.getElementById('custom-wrap');
+ const custom=document.getElementById('custom-quantity');
+ if(!select || !wrap || !custom) return;
+ function toggleCustom(){
+   const isCustom=select.value==='custom';
+   wrap.hidden=!isCustom;
+   custom.required=isCustom;
+   if(!isCustom) custom.value='';
+ }
+ select.addEventListener('change',toggleCustom);
+ toggleCustom();
+ document.querySelector('.batch-form').addEventListener('submit',function(e){
+   if(select.value==='custom' && (!custom.value || Number(custom.value)<1 || Number(custom.value)>500)){
+     e.preventDefault(); custom.focus();
+   }
+ });
+})();
+</script>
 <?php if ($created): ?>
 <section class="panel generated-panel" id="lote-gerado">
   <div class="heading"><div><h2>Lote criado: <?=count($created)?> placas</h2><p>As placas abaixo estão em estoque. Use a impressão em escala de 100%, sem ajustar à página.</p></div><button type="button" onclick="window.print()">Imprimir placas / Salvar PDF</button></div>
@@ -128,9 +149,7 @@ function downloadCsv(){
  const csv=rows.map(r=>r.map(v=>'"'+v.replaceAll('"','""')+'"').join(';')).join('\r\n');
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='edtek-review-inventario.csv';a.click();URL.revokeObjectURL(a.href);
 }
-const select=document.getElementById('quantity'),wrap=document.getElementById('custom-wrap'),custom=document.getElementById('custom-quantity');
-select.addEventListener('change',()=>{const isCustom=select.value==='custom';wrap.hidden=!isCustom;custom.required=isCustom;});
-document.querySelector('.batch-form').addEventListener('submit',e=>{if(select.value==='custom' && !custom.value){e.preventDefault();custom.focus();}});
+
 </script>
 <?php endif; ?>
 <?php layout_end(); ?>
