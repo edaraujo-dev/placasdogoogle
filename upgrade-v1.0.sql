@@ -61,6 +61,7 @@ CREATE TABLE email_settings (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE plaques
+  ADD COLUMN activation_code_encrypted TEXT NULL AFTER activation_code_hash,
   ADD COLUMN activated_by_user_id BIGINT UNSIGNED NULL,
   ADD COLUMN project_id BIGINT UNSIGNED NULL,
   ADD COLUMN reseller_id BIGINT UNSIGNED NULL,
